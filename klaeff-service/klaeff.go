@@ -7,13 +7,15 @@ import (
 )
 
 const (
-	Version = "0.0.0."
+	Version = "0.0.0"
 )
 
 var (
 
 	//go:embed static/index.html
 	indexFile []byte
+	//go:embed static/klaeff-banner.txt
+	bannerFile []byte
 	//go:embed static/img/klaeff-logo.png
 	logoImage []byte
 	//go:embed static/img/klaeff-impressum.png
@@ -21,6 +23,8 @@ var (
 )
 
 func main() {
+
+	fmt.Println(string(bannerFile))
 
 	http.Handle("/", http.HandlerFunc(handleKlaeffIndexRequest))
 	http.Handle("/version", http.HandlerFunc(handleKlaeffVersionRequest))
