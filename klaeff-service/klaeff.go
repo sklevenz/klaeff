@@ -30,6 +30,8 @@ func main() {
 	http.Handle("/version", http.HandlerFunc(handleKlaeffVersionRequest))
 	http.Handle("/logo", http.HandlerFunc(handleKlaeffLogoRequest))
 	http.Handle("/impressum", http.HandlerFunc(handleKlaeffImpressumRequest))
+	http.Handle("/health", http.HandlerFunc(handleKlaeffHealthRequest))
+	http.Handle("/ready", http.HandlerFunc(handleKlaeffReadyRequest))
 
 	fmt.Println("Server started at port 8080")
 	http.ListenAndServe(":8080", nil)
@@ -39,6 +41,16 @@ func main() {
 func handleKlaeffIndexRequest(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "text/html; charset=utf-8")
 	w.Write(indexFile)
+}
+
+func handleKlaeffHealthRequest(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "text/plain; charset=utf-8")
+	w.Write([]byte("1"))
+}
+
+func handleKlaeffReadyRequest(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "text/plain; charset=utf-8")
+	w.Write([]byte("1"))
 }
 
 func handleKlaeffVersionRequest(w http.ResponseWriter, r *http.Request) {
