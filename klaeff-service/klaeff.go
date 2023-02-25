@@ -6,8 +6,9 @@ import (
 	"net/http"
 )
 
-const (
+var (
 	Version = "0.0.0-dev"
+	Commit  = "dirty"
 )
 
 var (
@@ -55,7 +56,7 @@ func handleKlaeffReadyRequest(w http.ResponseWriter, r *http.Request) {
 
 func handleKlaeffVersionRequest(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json; charset=utf-8")
-	fmt.Fprintf(w, "{\"version\": \""+Version+"\"}")
+	fmt.Fprintf(w, "{\"version\": \""+Version+"\",\"commit\": \""+Commit+"\"}")
 }
 
 func handleKlaeffLogoRequest(w http.ResponseWriter, r *http.Request) {
