@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	Version = "0.0.0"
+	Version = "?.?.?-dev"
 )
 
 var (
