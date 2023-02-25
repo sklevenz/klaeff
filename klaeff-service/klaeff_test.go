@@ -20,6 +20,10 @@ func TestKlaeffIndexHandler(t *testing.T) {
 	res := w.Result()
 	defer res.Body.Close()
 
+	if res.Header.Get("Content-Type") != "text/html; charset=utf-8" {
+		t.Errorf("expected content type 'text/html; charset=utf-8' got '%v'", res.Header.Get("Content-Type"))
+	}
+
 	html, err := io.ReadAll(res.Body)
 	if err != nil {
 		t.Errorf("expected error to be nil got '%v'", err)
@@ -27,10 +31,6 @@ func TestKlaeffIndexHandler(t *testing.T) {
 
 	if !bytes.Equal(html, indexFile) {
 		log.Fatal("html data not equal")
-	}
-
-	if res.Header.Get("Content-Type") != "text/html; charset=utf-8" {
-		t.Errorf("expected content type 'text/html; charset=utf-8' got '%v'", res.Header.Get("Content-Type"))
 	}
 
 	if res.StatusCode != 200 {
@@ -45,6 +45,10 @@ func TestKlaeffVersionHandler(t *testing.T) {
 	res := w.Result()
 	defer res.Body.Close()
 
+	if res.Header.Get("Content-Type") != "application/json; charset=utf-8" {
+		t.Errorf("expected content type 'application/json; charset=utf-8' got '%v'", res.Header.Get("Content-Type"))
+	}
+
 	data, err := io.ReadAll(res.Body)
 	if err != nil {
 		t.Errorf("expected error to be nil got '%v'", err)
@@ -53,9 +57,6 @@ func TestKlaeffVersionHandler(t *testing.T) {
 		t.Errorf("expected '{\"version\": \""+Version+"\"}' got '%v'", string(data))
 	}
 
-	if res.Header.Get("Content-Type") != "application/json; charset=utf-8" {
-		t.Errorf("expected content type 'application/json; charset=utf-8' got '%v'", res.Header.Get("Content-Type"))
-	}
 	if res.StatusCode != 200 {
 		t.Errorf("expected status code '200' got '%v'", res.StatusCode)
 	}
@@ -68,6 +69,10 @@ func TestKlaeffLogoHandler(t *testing.T) {
 	res := w.Result()
 	defer res.Body.Close()
 
+	if res.Header.Get("Content-Type") != "image/png" {
+		t.Errorf("expected content type 'image/png' got '%v'", res.Header.Get("Content-Type"))
+	}
+
 	img, err := io.ReadAll(res.Body)
 
 	if err != nil {
@@ -76,10 +81,6 @@ func TestKlaeffLogoHandler(t *testing.T) {
 
 	if !bytes.Equal(img, logoImage) {
 		log.Fatal("image data not equal")
-	}
-
-	if res.Header.Get("Content-Type") != "image/png" {
-		t.Errorf("expected content type 'image/png' got '%v'", res.Header.Get("Content-Type"))
 	}
 
 	if res.StatusCode != 200 {
@@ -94,6 +95,10 @@ func TestKlaeffImpressumHandler(t *testing.T) {
 	res := w.Result()
 	defer res.Body.Close()
 
+	if res.Header.Get("Content-Type") != "image/png" {
+		t.Errorf("expected content type 'image/png' got '%v'", res.Header.Get("Content-Type"))
+	}
+
 	img, err := io.ReadAll(res.Body)
 	if err != nil {
 		t.Errorf("expected error to be nil got '%v'", err)
@@ -103,8 +108,54 @@ func TestKlaeffImpressumHandler(t *testing.T) {
 		log.Fatal("image data not equal")
 	}
 
-	if res.Header.Get("Content-Type") != "image/png" {
-		t.Errorf("expected content type 'image/png' got '%v'", res.Header.Get("Content-Type"))
+	if res.StatusCode != 200 {
+		t.Errorf("expected status code '200' got '%v'", res.StatusCode)
+	}
+}
+
+func TestKlaeffHealthHandler(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/health", nil)
+	w := httptest.NewRecorder()
+	handleKlaeffHealthRequest(w, req)
+	res := w.Result()
+	defer res.Body.Close()
+
+	if res.Header.Get("Content-Type") != "text/plain; charset=utf-8" {
+		t.Errorf("expected content type 'text/plain; charset=utf-8' got '%v'", res.Header.Get("Content-Type"))
+	}
+
+	txt, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got '%v'", err)
+	}
+
+	if string(txt) != "1" {
+		log.Fatalf("data not 1 : %v", string(txt))
+	}
+
+	if res.StatusCode != 200 {
+		t.Errorf("expected status code '200' got '%v'", res.StatusCode)
+	}
+}
+
+func TestKlaeffReadyHandler(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/ready", nil)
+	w := httptest.NewRecorder()
+	handleKlaeffReadyRequest(w, req)
+	res := w.Result()
+	defer res.Body.Close()
+
+	if res.Header.Get("Content-Type") != "text/plain; charset=utf-8" {
+		t.Errorf("expected content type 'text/plain; charset=utf-8' got '%v'", res.Header.Get("Content-Type"))
+	}
+
+	txt, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got '%v'", err)
+	}
+
+	if string(txt) != "1" {
+		log.Fatalf("data not 1 : %v", string(txt))
 	}
 
 	if res.StatusCode != 200 {
