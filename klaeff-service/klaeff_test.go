@@ -53,8 +53,8 @@ func TestKlaeffVersionHandler(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected error to be nil got '%v'", err)
 	}
-	if string(data) != "{\"version\": \""+Version+"\",\"commit\": \""+Commit+"\"}" {
-		t.Errorf("expected '{\"version\": \""+Version+"\",\"commit\": \""+Commit+"\"}' got '%v'", string(data))
+	if string(data) != "{\"version\": \""+version+"\"}" {
+		t.Errorf("expected '{\"version\": \""+version+"\"}' got '%v'", string(data))
 	}
 
 	if res.StatusCode != 200 {

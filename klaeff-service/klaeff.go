@@ -3,12 +3,13 @@ package main
 import (
 	_ "embed"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 )
 
 var (
-	Version = "0.0.0-dev"
-	Commit  = "dirty"
+	version = "0.0.0-dev"
 )
 
 var (
@@ -27,6 +28,13 @@ func main() {
 
 	fmt.Println(string(bannerFile))
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = fmt.Sprintf(":%v", 8080)
+	} else {
+		port = fmt.Sprintf(":%v", port)
+	}
+
 	http.Handle("/", http.HandlerFunc(handleKlaeffIndexRequest))
 	http.Handle("/version", http.HandlerFunc(handleKlaeffVersionRequest))
 	http.Handle("/logo", http.HandlerFunc(handleKlaeffLogoRequest))
@@ -34,9 +42,11 @@ func main() {
 	http.Handle("/health", http.HandlerFunc(handleKlaeffHealthRequest))
 	http.Handle("/ready", http.HandlerFunc(handleKlaeffReadyRequest))
 
-	fmt.Println("Server started at port 8080")
-	http.ListenAndServe(":8080", nil)
-
+	log.Print("Server started at port " + port)
+	err := http.ListenAndServe(port, nil)
+	if err != nil {
+		log.Printf("%v\n", err)
+	}
 }
 
 func handleKlaeffIndexRequest(w http.ResponseWriter, r *http.Request) {
@@ -56,7 +66,7 @@ func handleKlaeffReadyRequest(w http.ResponseWriter, r *http.Request) {
 
 func handleKlaeffVersionRequest(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json; charset=utf-8")
-	fmt.Fprintf(w, "{\"version\": \""+Version+"\",\"commit\": \""+Commit+"\"}")
+	fmt.Fprintf(w, "{\"version\": \""+version+"\"}")
 }
 
 func handleKlaeffLogoRequest(w http.ResponseWriter, r *http.Request) {

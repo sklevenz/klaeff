@@ -54,8 +54,7 @@ API_JSON=$(printf '{"tag_name": "v%s","target_commitish": "%s","name": "v%s","bo
 echo "$API_JSON"
 API_RESPONSE_STATUS=$(curl --data "$API_JSON" -H "Authorization: token $GITHUB_ACCESS_TOKEN" -s -i https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/releases)
 echo "$API_RESPONSE_STATUS"
-
-# echo "============================================================"
-# set -x
-# API_RESPONSE_STATUS=$(curl --data-binary "@/Users/stephan/dev/github.com/sklevenz/klaeff/klaeff-service/gen/klaeff-service.zip" -H "Authorization: token $GITHUB_ACCESS_TOKEN" -s -i https://uploads.github.com/repos/$REPO_OWNER/$REPO_NAME/releases/"v$VERSION"/assets?name=klaeff-service.zip)
-# echo "$API_RESPONSE_STATUS"
+echo "============================================================"
+set -x
+API_RESPONSE_STATUS=$(curl --data-binary "@/Users/stephan/dev/github.com/sklevenz/klaeff/klaeff-service/gen/klaeff-service.zip" -H "Authorization: token $GITHUB_ACCESS_TOKEN" -s -i https://uploads.github.com/repos/$REPO_OWNER/$REPO_NAME/releases/"v$VERSION"/assets?name=klaeff-service.zip)
+echo "$API_RESPONSE_STATUS"
