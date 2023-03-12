@@ -15,5 +15,6 @@ do
 	esac
 done
 
+echo "LOG: $(date) -- http://$HOST:$PORT/$ENDPOINT"
 curl -isS http://$HOST:$PORT/$ENDPOINT
 

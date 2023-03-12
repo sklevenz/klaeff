@@ -17,11 +17,11 @@ do
 done
 
 if [ "$DOCKER" -eq "1" ]; then
-  echo "Run as docker container ..."
+  echo "LOG: $(date) -- Run as docker container ..."
   docker build -t klaeff-service ./docker
   docker run -p 8080:8080 -it klaeff-service
 else
-  echo "Run as go programm ..."
+  echo"LOG: $(date) -- Run as go programm ..."
   pushd klaeff-service
     go run klaeff.go
   popd
