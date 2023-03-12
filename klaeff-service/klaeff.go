@@ -23,7 +23,7 @@ var (
 	//go:embed static/img/klaeff-impressum.png
 	impressumImage []byte
 )
-
+x
 func main() {
 
 	fmt.Println(string(bannerFile))
