@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+WORKK IN PROGRESS
+
 VERSION="0"
 DRAFT=""
 
@@ -18,3 +20,7 @@ if [ $VERSION == "0" ]; then
 	echo "  -d : dev release"
 	exit 1
 fi
+
+pushd docker
+
+popd
