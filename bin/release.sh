@@ -47,7 +47,7 @@ pushd klaeff-service
   GOOS=windows GOARCH=amd64 go build -o "gen/klaeff-service-$VERSION.exe" -ldflags="$LDFLAGS" ./...
   GOOS=darwin GOARCH=amd64 go build -o "gen/klaeff-service-amd64-darwin-$VERSION" -ldflags="$LDFLAGS"  ./...
   GOOS=linux GOARCH=386 go build -o "gen/klaeff-service-386-linux-$VERSION" -ldflags="$LDFLAGS" ./...
-  GOOS=linux GOARCH=amd64 go build -o "gen/klaeff-service-amd64-linux-$VERSION" -ldflags="$LDFLAGS" ./...
+  GOOS=linux GOARCH=arm64 go build -o "gen/klaeff-service-arm64-linux-$VERSION" -ldflags="$LDFLAGS" ./...
 popd
 
 echo "LOG: $(date) -- ============================================================"
@@ -62,7 +62,7 @@ echo "LOG: $(date) -- Release id: $ID"
 echo "LOG: $(date) -- ============================================================"
 echo "LOG: $(date) -- upload binaries"
 
-RESPONSE=$(curl --data-binary "@./klaeff-service/gen/klaeff-service-amd64-linux-$VERSION" -H "Content-Type: application/octet-stream" \-H "Authorization: token $GITHUB_COM_TOKEN" -s "https://uploads.github.com/repos/$GITHUB_COM_USER/$REPO_NAME/releases/$ID/assets?name=klaeff-service-amd64-linux-$VERSION")
+RESPONSE=$(curl --data-binary "@./klaeff-service/gen/klaeff-service-arm64-linux-$VERSION" -H "Content-Type: application/octet-stream" \-H "Authorization: token $GITHUB_COM_TOKEN" -s "https://uploads.github.com/repos/$GITHUB_COM_USER/$REPO_NAME/releases/$ID/assets?name=klaeff-service-arm64-linux-$VERSION")
 NAME=$(echo "$RESPONSE" | jq -r .name)
 echo "LOG: $(date) -- name: $NAME"
 
