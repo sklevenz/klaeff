@@ -10,10 +10,10 @@ do
 		in
         h) HOST="$OPTARG" ;;
         p) PORT="$OPTARG" ;;
-        e) ENDPOINT="$OPTARG" ;;
+		e) ENDPOINT="$OPTARG" ;;
 		v) ENDPOINT="version" ;;
 	esac
 done
 
-curl -is http://$HOST:$PORT/$ENDPOINT
+curl -isS http://$HOST:$PORT/$ENDPOINT
 
