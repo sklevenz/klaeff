@@ -8,4 +8,7 @@ echo "LOG: $(date) -- ldflags: $LDFLAGS"
 
 pushd klaeff-service
   go build -o gen/klaeff-service -ldflags="$LDFLAGS" ./...
+  ERROR=$?
 popd
+
+exit $ERROR

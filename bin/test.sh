@@ -2,4 +2,7 @@
 
 pushd klaeff-service
   go test ./...
+  ERROR=$?
 popd
+
+exit $ERROR
