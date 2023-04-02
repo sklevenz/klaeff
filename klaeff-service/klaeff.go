@@ -42,7 +42,7 @@ func main() {
 	http.Handle("/health", http.HandlerFunc(handleKlaeffHealthRequest))
 	http.Handle("/ready", http.HandlerFunc(handleKlaeffReadyRequest))
 
-	log.Print("Server started at port " + port)
+	log.Printf("Server version %v started at port %v", version, port)
 	err := http.ListenAndServe(port, nil)
 	if err != nil {
 		log.Printf("%v\n", err)
