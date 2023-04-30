@@ -80,7 +80,7 @@ func handleKlaeffLogoRequest(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleKlaeffImpressumRequest(w http.ResponseWriter, r *http.Request) {
-	log.Println("/index")
+	log.Printf("Request: %v %v", r.Method, r.RequestURI)
 	w.Write(impressumImage)
 	w.Header().Add("Content-Type", "image/png")
 }
