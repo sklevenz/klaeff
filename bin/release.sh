@@ -1,39 +1,30 @@
 #!/usr/bin/env bash
 
-MESSAGE="0"
-VERSION="0"
-DRAFT="false"
-PRE="false"
+usage() {
+	echo "Usage: $0 <version>"
+	exit 1
+}
+
+if [ "$1" == "" ]; then
+	usage
+fi
+
+rm -rf gen
+mkdir gen
+rm -rf klaeff-service/gen
+mkdir klaeff-service/gen
+
+VERSION="$1"
+MESSAGE=$(printf "Release of version %s" $VERSION)
 BRANCH="main"
 REPO_REMOTE=$(git config --get remote.origin.url)
 REPO_NAME=$(basename -s .git $REPO_REMOTE)
-
-while getopts v:dp option
-do
-	case "${option}"
-		in
-		v) VERSION="$OPTARG" ;;
-		d) DRAFT="true" ;;
-		p) PRE="true" ;;
-	esac
-done
-
-# usage
-if [ $VERSION == "0" ]; then
-	echo "Usage: $0 -v <version> [-draft] [-pre]"
-	echo "  -d : draft release"
-	echo "  -p : pre release"
-	exit 1
-fi
 
 check if repository is clean
 if [[ ! -z $(git status -s) ]]; then
 	echo "LOG: $(date) -- Error: repository is dirty"
 	exit 1
 fi
-
-MESSAGE=$(printf "Release of version %s" $VERSION)
-echo "LOG: $(date) -- $MESSAGE"
 
 echo "LOG: $(date) -- tag repository: $VERSION"
 # tag repository
@@ -52,7 +43,7 @@ popd
 
 echo "LOG: $(date) -- ============================================================"
 echo "LOG: $(date) -- create github release"
-API_JSON=$(printf '{"tag_name": "%s","target_commitish": "%s","name": "%s","body": "%s","draft": %s,"prerelease": %s}' "$VERSION" "$BRANCH" "$VERSION" "$MESSAGE" "$DRAFT" "$PRE" )
+API_JSON=$(printf '{"tag_name": "%s","target_commitish": "%s","name": "%s","body": "%s","draft": %s,"prerelease": %s}' "$VERSION" "$BRANCH" "$VERSION" "$MESSAGE" "falseT" "false" )
 echo "LOG: $(date) -- api-json: $API_JSON"
 RESPONSE=$(curl -s --data "$API_JSON" -H "Authorization: token $GITHUB_COM_TOKEN" https://api.github.com/repos/$GITHUB_COM_USER/$REPO_NAME/releases)
 
@@ -78,3 +69,9 @@ RESPONSE=$(curl --data-binary "@./klaeff-service/gen/klaeff-service-$VERSION.exe
 NAME=$(echo "$RESPONSE" | jq -r .name)
 echo "LOG: $(date) -- name: $NAME"
 
+# build and push a release image
+docker build --build-arg VERSION=$VERSION -t sklevenz/klaeff-service:$VERSION ./docker
+docker build --build-arg VERSION=$VERSION -t sklevenz/klaeff-service:latest ./docker
+
+docker push sklevenz/klaeff-service:$VERSION
+docker push sklevenz/klaeff-service:latest
