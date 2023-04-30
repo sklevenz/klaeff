@@ -42,7 +42,7 @@ func main() {
 	http.Handle("/health", http.HandlerFunc(handleKlaeffHealthRequest))
 	http.Handle("/ready", http.HandlerFunc(handleKlaeffReadyRequest))
 
-	log.Print("Server started at port " + port)
+	log.Printf("Server version %v started at port %v", version, port)
 	err := http.ListenAndServe(port, nil)
 	if err != nil {
 		log.Printf("%v\n", err)
@@ -50,31 +50,37 @@ func main() {
 }
 
 func handleKlaeffIndexRequest(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Request: %v %v", r.Method, r.RequestURI)
 	w.Header().Add("Content-Type", "text/html; charset=utf-8")
 	w.Write(indexFile)
 }
 
 func handleKlaeffHealthRequest(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Request: %v %v", r.Method, r.RequestURI)
 	w.Header().Add("Content-Type", "text/plain; charset=utf-8")
 	w.Write([]byte("1"))
 }
 
 func handleKlaeffReadyRequest(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Request: %v %v", r.Method, r.RequestURI)
 	w.Header().Add("Content-Type", "text/plain; charset=utf-8")
 	w.Write([]byte("1"))
 }
 
 func handleKlaeffVersionRequest(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Request: %v %v", r.Method, r.RequestURI)
 	w.Header().Add("Content-Type", "application/json; charset=utf-8")
 	fmt.Fprintf(w, "{\"version\": \""+version+"\"}")
 }
 
 func handleKlaeffLogoRequest(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Request: %v %v", r.Method, r.RequestURI)
 	w.Write(logoImage)
 	w.Header().Add("Content-Type", "image/png")
 }
 
 func handleKlaeffImpressumRequest(w http.ResponseWriter, r *http.Request) {
+	log.Println("/index")
 	w.Write(impressumImage)
 	w.Header().Add("Content-Type", "image/png")
 }

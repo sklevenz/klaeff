@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-WORKK IN PROGRESS
-
 VERSION="0"
 DRAFT=""
 
@@ -10,17 +8,18 @@ do
 	case "${option}"
 		in
 		v) VERSION="$OPTARG" ;;
-		d) DRAFT="true" ;;
 	esac
 done
 
 # usage
 if [ $VERSION == "0" ]; then
 	echo "Usage: $0 -v <version> [-dev]"
-	echo "  -d : dev release"
 	exit 1
 fi
 
-pushd docker
+# build and push a release image
+docker build --build-arg VERSION=$VERSION -t sklevenz/klaeff-service:$VERSION ./docker
+docker build --build-arg VERSION=$VERSION -t sklevenz/klaeff-service:latest ./docker
 
-popd
+docker push sklevenz/klaeff-service:$VERSION
+docker push sklevenz/klaeff-service:latest

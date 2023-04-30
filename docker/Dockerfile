@@ -1,14 +1,14 @@
 FROM ubuntu:latest
 
-WORKDIR /usr/src/app
+ARG VERSION=$VERSION
 
-COPY . . 
+WORKDIR /usr/local/bin
 
-RUN apt-get -y update; apt-get -y install curl
-RUN curl -Li https://github.com/sklevenz/klaeff/releases/download/0.0.0/klaeff-service-arm64-linux-0.0.0 > klaeff-service-arm64-linux-0.0.0
-RUN chmod +x ./klaeff-service-arm64-linux-0.0.0
-# RUN ./klaeff-service-arm64-linux-0.0.0
-RUN ls -al
-RUN echo "VERSION=$VERSION"
+RUN echo "version=$VERSION"
+
+RUN apt-get -y update; apt-get -y install wget
+RUN wget https://github.com/sklevenz/klaeff/releases/download/$VERSION/klaeff-service-arm64-linux-$VERSION 
+RUN chmod +x ./klaeff-service-arm64-linux-$VERSION
+RUN ln ./klaeff-service-arm64-linux-$VERSION klaeff-service
 
 CMD ["app"]
