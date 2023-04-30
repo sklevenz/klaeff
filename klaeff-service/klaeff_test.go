@@ -113,6 +113,31 @@ func TestKlaeffImpressumHandler(t *testing.T) {
 	}
 }
 
+func TestKlaeffFaviconHandler(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/favicon.ico", nil)
+	w := httptest.NewRecorder()
+	handleKlaeffFaviconRequest(w, req)
+	res := w.Result()
+	defer res.Body.Close()
+
+	if res.Header.Get("Content-Type") != "image/x-icon" {
+		t.Errorf("expected content type 'image/x-icon' got '%v'", res.Header.Get("Content-Type"))
+	}
+
+	img, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("expected error to be nil got '%v'", err)
+	}
+
+	if !bytes.Equal(img, faviconImage) {
+		log.Fatal("image data not equal")
+	}
+
+	if res.StatusCode != 200 {
+		t.Errorf("expected status code '200' got '%v'", res.StatusCode)
+	}
+}
+
 func TestKlaeffHealthHandler(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/health", nil)
 	w := httptest.NewRecorder()

@@ -22,6 +22,8 @@ var (
 	logoImage []byte
 	//go:embed static/img/klaeff-impressum.png
 	impressumImage []byte
+	//go:embed static/img/favicon.ico
+	faviconImage []byte
 )
 
 func main() {
@@ -41,6 +43,7 @@ func main() {
 	http.Handle("/impressum", http.HandlerFunc(handleKlaeffImpressumRequest))
 	http.Handle("/health", http.HandlerFunc(handleKlaeffHealthRequest))
 	http.Handle("/ready", http.HandlerFunc(handleKlaeffReadyRequest))
+	http.Handle("/favicon.ico", http.HandlerFunc(handleKlaeffFaviconRequest))
 
 	log.Printf("Server version %v started at port %v", version, port)
 	err := http.ListenAndServe(port, nil)
@@ -83,4 +86,10 @@ func handleKlaeffImpressumRequest(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Request: %v %v", r.Method, r.RequestURI)
 	w.Write(impressumImage)
 	w.Header().Add("Content-Type", "image/png")
+}
+
+func handleKlaeffFaviconRequest(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Request: %v %v", r.Method, r.RequestURI)
+	w.Write(faviconImage)
+	w.Header().Add("Content-Type", "image/x-icon")
 }
