@@ -22,7 +22,7 @@ nodes:
 EOF
 
 else
-echo "LOG $(date) cluster is already running..."
+  echo "LOG $(date) cluster is already running..."
 fi
 
 kind get clusters
